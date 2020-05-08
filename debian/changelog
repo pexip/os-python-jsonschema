@@ -1,0 +1,264 @@
+python-jsonschema (3.2.0-3) unstable; urgency=medium
+
+  * Uploading to unstable.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 08 May 2020 11:04:26 +0200
+
+python-jsonschema (3.2.0-2) experimental; urgency=medium
+
+  * d/control: Add {build}dependency python3-importlib-metadata
+
+ -- Michal Arbet <michal.arbet@ultimum.io>  Tue, 05 May 2020 11:43:45 +0200
+
+python-jsonschema (3.2.0-1) experimental; urgency=medium
+
+  * New upstream version
+  * d/copyright: Add me to copyright
+  * d/control:
+    - Add me to uploaders
+    - Bump standards to 4.5.0
+    - Breaks: python3-json-pointer (<< 1.14) (Closes: #949723)
+  * d/patches:
+    - Remove remove-TestBuiltinFormats-hack.patch
+    - Add fix-lintian-privacy-breach.patch
+
+ -- Michal Arbet <michal.arbet@ultimum.io>  Tue, 05 May 2020 09:21:24 +0200
+
+python-jsonschema (3.0.2-4) unstable; urgency=medium
+
+  * Add missing dependencies for autopkgtests.
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 09 Dec 2019 11:31:53 +0100
+
+python-jsonschema (3.0.2-3) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * Run wrap-and-sort -bastk.
+  * Bump Standards-Version to 4.4.1.
+
+  [ Thomas Goirand ]
+  * Uploading to unstable.
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 05 Dec 2019 22:05:33 +0100
+
+python-jsonschema (3.0.2-2) experimental; urgency=medium
+
+  * Team upload.
+  * Use pybuild to build package.
+  * Bump debhelper compat level to 12.
+  * Bump standards version to 4.4.0.
+
+ -- Ondřej Nový <onovy@debian.org>  Wed, 25 Sep 2019 12:48:45 +0200
+
+python-jsonschema (3.0.2-1) experimental; urgency=medium
+
+  [ Ondřej Nový ]
+  * Remove python-mock from runtime dependency
+  * Running wrap-and-sort -bast.
+  * Use debhelper-compat instead of debian/compat.
+
+  [ Thomas Goirand ]
+  * New upstream release.
+    - supports draft7 (Closes: #939943).
+    - corrects import order (Closes: #931761).
+  * Fixed (build-)depends for this release.
+  * Add export SETUPTOOLS_SCM_PRETEND_VERSION as upstream switched to that.
+  * Removed Python 2 support (Closes: #937861).
+  * Add remove-TestBuiltinFormats-hack.patch.
+  * Add remove-sphinxcontrib.spelling-from-doc-conf.py.patch.
+  * Move the package to "third-party" Salsa subgroup.
+
+ -- Thomas Goirand <zigo@debian.org>  Tue, 24 Sep 2019 16:02:04 +0200
+
+python-jsonschema (2.6.0-4) unstable; urgency=medium
+
+  * Define http{s,}_proxy when building the doc to avoid internet connection
+    during the doc build (Closes: #908152).
+  * Add do-not-access-internet-during-doc-build.patch.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 07 Sep 2018 09:03:51 +0200
+
+python-jsonschema (2.6.0-3) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/control: Set Vcs-* to salsa.debian.org
+  * d/control: Use team+openstack@tracker.debian.org as maintainer
+
+  [ Thomas Goirand ]
+  * Add a -doc package. (Closes: #857867)
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 06 Sep 2018 00:36:26 +0200
+
+python-jsonschema (2.6.0-2) unstable; urgency=medium
+
+  * Team upload.
+  * d/p/fixup-version.patch: Set version to 2.6.0 (Closes: #881833)
+
+ -- Ondřej Nový <onovy@debian.org>  Wed, 15 Nov 2017 20:43:29 +0100
+
+python-jsonschema (2.6.0-1) unstable; urgency=medium
+
+  [ Daniel Baumann ]
+  * Updating vcs fields.
+  * Updating copyright format url.
+  * Updating maintainer field.
+  * Running wrap-and-sort -bast.
+  * Updating standards version to 4.0.0.
+  * Removing gbp.conf, not used anymore or should be specified in the
+    developers dotfiles.
+  * Correcting permissions in debian packaging files.
+  * Updating standards version to 4.0.1.
+  * Updating standards version to 4.1.0.
+
+  [ Ondřej Nový ]
+  * Bumped debhelper compat version to 10
+
+  [ Thomas Goirand ]
+  * New upstream release.
+  * Standards-Version is now 4.1.1.
+  * Using pkgos-dh_auto_install.
+  * Testing with all versions of Python 3.
+  * Refreshed version patch.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 01 Nov 2017 17:23:29 +0100
+
+python-jsonschema (2.5.1-6) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/s/options: extend-diff-ignore of .gitreview
+  * d/control: Using OpenStack's Gerrit as VCS URLs.
+
+  [ Thomas Goirand ]
+  * Adding depends on python3-pkg-resources (Closes: #839075).
+
+ -- Thomas Goirand <zigo@debian.org>  Tue, 04 Oct 2016 16:08:48 +0200
+
+python-jsonschema (2.5.1-5) unstable; urgency=medium
+
+  * Team upload.
+  * Fixed VCS URLs (https).
+  * Mention Draft 4 support in package description (Closes: #816711)
+  * Removed d/CHANGELOG, upstream provides own changelog now
+  * Bumped Standards-Version to 3.9.8, no changes needed
+  * d/rules: Changed UPSTREAM_GIT protocol to https
+
+ -- Ondřej Nový <novy@ondrej.org>  Thu, 19 May 2016 22:02:32 +0200
+
+python-jsonschema (2.5.1-4) unstable; urgency=medium
+
+  * override_dh_python3 to fix Py3 shebang.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 23 Oct 2015 22:40:58 +0000
+
+python-jsonschema (2.5.1-3) unstable; urgency=medium
+
+  * Uploading to unstable.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 16 Oct 2015 10:02:14 +0000
+
+python-jsonschema (2.5.1-2) experimental; urgency=medium
+
+  * Fixed pacakge version parsing to be compatible with Ubuntu Trusty.
+  * Fixed http{s,}_proxy during dh_auto_clean to avoid PyPi downloads.
+  * Added python{3,}-vcversioner as build-depends-indep.
+  * Using update-alternatives to provide /usr/bin/jsonschema.
+  * Fixed missing ${python3:Depends}.
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 17 Sep 2015 09:25:38 +0200
+
+python-jsonschema (2.5.1-1) experimental; urgency=medium
+
+  * New upstream release.
+  * Usual debian/control clean-up.
+  * Added python{3,}-vcversioner as build-depends.
+  * Creates version.txt on build, clean it on clean.
+  * Do not delete *egg-info on clean, use debian/source/options instead.
+  * Removed XS-Test-Suite in debian/control.
+  * Added python-functools32 as build-depends.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 29 Jul 2015 23:18:54 +0200
+
+python-jsonschema (2.4.0-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 15 Apr 2015 09:44:16 +0200
+
+python-jsonschema (2.3.0-1) unstable; urgency=low
+
+  [ Thomas Goirand ]
+  * New upstream release.
+  * Do not depend on openstack-pkg-tools anymore.
+  * Build-Depends on autopkgtest and python{3,}-pytest.
+
+  [ Jean-Baptiste Lallement ]
+  * Add autopkgtest that runs the upstream test suite against the installed
+    package (Closes: #729467)
+
+ -- Thomas Goirand <zigo@debian.org>  Sun, 08 Dec 2013 11:37:07 +0800
+
+python-jsonschema (2.0.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * Added Pre-Depends dpkg (>= 1.15.6~) missing for the python3 package.
+  * Removes now obsolete debian/patches folder.
+  * Fixes nosetests calls (removes test.py as arg).
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 24 Jul 2013 15:11:14 +0800
+
+python-jsonschema (1.1.0-2) unstable; urgency=low
+
+  [ Thomas Goirand ]
+  * Ran wrap-and-sort.
+
+  [ Dmitrijs Ledkovs ]
+  * Builds the python3 package (Closes: #710898).
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 30 May 2013 14:04:07 +0800
+
+python-jsonschema (1.1.0-1) unstable; urgency=low
+
+  * Uploading to unstable.
+  * New upstream release.
+
+ -- Thomas Goirand <zigo@debian.org>  Sat, 11 May 2013 07:30:18 +0000
+
+python-jsonschema (0.8.0-2) experimental; urgency=low
+
+  * Missing build-dependency: python-mock (Closes: #700283).
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 11 Feb 2013 02:19:29 +0000
+
+python-jsonschema (0.8.0-1) experimental; urgency=low
+
+  * New upstream release.
+  * Team maintains the package in pkg-openstack.
+  * Fixed debian/copyright format URL.
+  * Added Ghe and myself in debian/copyright.
+  * Bumped debhelper and compat to >= 9.
+  * Bumped Standards-Version to 3.9.4
+  * Added VCS and Homepage fields.
+  * Now using openstack-pkg-tools.
+  * Pre-Depends: dpkg (>= 1.15.6~) because of xz compression.
+  * Added a watch file.
+
+ -- Thomas Goirand <zigo@debian.org>  Thu, 31 Jan 2013 23:12:17 +0800
+
+python-jsonschema (0.2-1) unstable; urgency=low
+
+  * First Debian Packaging
+
+ -- Ghe Rivero <ghe@debian.org>  Wed, 30 May 2012 14:43:07 +0200
+
+python-jsonschema (0.2-0ubuntu2) quantal; urgency=low
+
+  * debian/control: Add python-nose as a build dependency.
+  * debian/rules: Run testsuite during build.
+
+ -- Chuck Short <zulcss@ubuntu.com>  Wed, 23 May 2012 20:02:47 -0400
+
+python-jsonschema (0.2-0ubuntu1) quantal; urgency=low
+
+  * Initial release.
+
+ -- Chuck Short <zulcss@ubuntu.com>  Wed, 02 May 2012 08:46:39 -0400

@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+UPSTREAM_GIT := https://github.com/Julian/jsonschema.git
+include /usr/share/openstack-pkg-tools/pkgos.make
+
+export PYBUILD_NAME=jsonschema
+
+%:
+	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
+
+override_dh_auto_test:
+	# We need .egg_info for tests
+	dh_auto_install
+	dh_auto_test
+
+override_dh_sphinxdoc:
+ifeq (,$(findstring nodoc, $(DEB_BUILD_OPTIONS)))
+	http_proxy=127.0.0.1:9 https_proxy=127.0.0.1:9 HTTP_PROXY=127.0.0.1:9 HTTPS_PROXY=127.0.0.1:9 PYTHONPATH=$(CURDIR) PYTHON=python3 python3 -m sphinx $(SPHINXOPTS) -b html docs $(CURDIR)/debian/python-jsonschema-doc/usr/share/doc/python-jsonschema-doc/html
+	dh_sphinxdoc
+endif

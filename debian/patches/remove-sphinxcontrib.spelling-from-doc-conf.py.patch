@@ -1,0 +1,20 @@
+Description: Remove sphinxcontrib.spelling extension
+ This is doing network access during build.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: not-needed
+Last-Update: 2019-09-24
+
+--- python-jsonschema-3.0.2.orig/docs/conf.py
++++ python-jsonschema-3.0.2/docs/conf.py
+@@ -26,11 +26,8 @@
+     "sphinx.ext.autodoc",
+     "sphinx.ext.coverage",
+     "sphinx.ext.doctest",
+-    "sphinx.ext.intersphinx",
+     "sphinx.ext.napoleon",
+     "sphinx.ext.viewcode",
+-    "sphinxcontrib.spelling",
+-    "jsonschema_role",
+ ]
+ 
+ cache_path = "_cache"
