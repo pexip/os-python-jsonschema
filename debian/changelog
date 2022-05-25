@@ -1,3 +1,9 @@
+python-jsonschema (3.2.0-3pexip1) pexip; urgency=medium
+
+  * Prepare Pexip packaging
+
+ -- Vincent Sanders <vince@pexip.com>  Wed, 25 May 2022 11:19:51 +0000
+
 python-jsonschema (3.2.0-3) unstable; urgency=medium
 
   * Uploading to unstable.
