@@ -19,148 +19,26 @@ The simplest way to validate an instance under a given schema is to use the
     fundamentals underway at `Understanding JSON Schema
     <https://json-schema.org/understanding-json-schema/>`_
 
+.. _validator-protocol:
 
-The Validator Interface
+The Validator Protocol
 -----------------------
 
-`jsonschema` defines an (informal) interface that all validator
-classes should adhere to.
+`jsonschema` defines a protocol that all validator classes should adhere
+to.
 
-.. class:: IValidator(schema, types=(), resolver=None, format_checker=None)
-
-    :argument dict schema: the schema that the validator object
-        will validate with. It is assumed to be valid, and providing
-        an invalid schema can lead to undefined behavior. See
-        `IValidator.check_schema` to validate a schema first.
-    :argument resolver: an instance of `RefResolver` that will be
-        used to resolve :validator:`$ref` properties (JSON references). If
-        unprovided, one will be created.
-    :argument format_checker: an instance of `FormatChecker`
-        whose `FormatChecker.conforms` method will be called to
-        check and see if instances conform to each :validator:`format`
-        property present in the schema. If unprovided, no validation
-        will be done for :validator:`format`. Certain formats require
-        additional packages to be installed (ipv5, uri, color, date-time).
-        The required packages can be found at the bottom of this page.
-    :argument types:
-        .. deprecated:: 3.0.0
-
-            Use `TypeChecker.redefine` and
-            `jsonschema.validators.extend` instead of this argument.
-
-                See `validating-types` for details.
-
-        If used, this overrides or extends the list of known types when
-        validating the :validator:`type` property.
-
-        What is provided should map strings (type names) to class objects
-        that will be checked via `isinstance`.
-
-
-    .. attribute:: META_SCHEMA
-
-        An object representing the validator's meta schema (the schema that
-        describes valid schemas in the given version).
-
-    .. attribute:: VALIDATORS
-
-        A mapping of validator names (`str`\s) to functions
-        that validate the validator property with that name. For more
-        information see `creating-validators`.
-
-    .. attribute:: TYPE_CHECKER
-
-        A `TypeChecker` that will be used when validating :validator:`type`
-        properties in JSON schemas.
-
-    .. attribute:: schema
-
-        The schema that was passed in when initializing the object.
-
-    .. attribute:: DEFAULT_TYPES
-
-        .. deprecated:: 3.0.0
-
-            Use of this attribute is deprecated in favor of the new `type
-            checkers <TypeChecker>`.
-
-            See `validating-types` for details.
-
-        For backwards compatibility on existing validator classes, a mapping of
-        JSON types to Python class objects which define the Python types for
-        each JSON type.
-
-        Any existing code using this attribute should likely transition to
-        using `TypeChecker.is_type`.
-
-
-    .. classmethod:: check_schema(schema)
-
-        Validate the given schema against the validator's `META_SCHEMA`.
-
-        :raises: `jsonschema.exceptions.SchemaError` if the schema
-            is invalid
-
-    .. method:: is_type(instance, type)
-
-        Check if the instance is of the given (JSON Schema) type.
-
-        :type type: str
-        :rtype: bool
-        :raises: `jsonschema.exceptions.UnknownType` if ``type``
-            is not a known type.
-
-    .. method:: is_valid(instance)
-
-        Check if the instance is valid under the current `schema`.
-
-        :rtype: bool
-
-        >>> schema = {"maxItems" : 2}
-        >>> Draft3Validator(schema).is_valid([2, 3, 4])
-        False
-
-    .. method:: iter_errors(instance)
-
-        Lazily yield each of the validation errors in the given instance.
-
-        :rtype: an `collections.Iterable` of
-            `jsonschema.exceptions.ValidationError`\s
-
-        >>> schema = {
-        ...     "type" : "array",
-        ...     "items" : {"enum" : [1, 2, 3]},
-        ...     "maxItems" : 2,
-        ... }
-        >>> v = Draft3Validator(schema)
-        >>> for error in sorted(v.iter_errors([2, 3, 4]), key=str):
-        ...     print(error.message)
-        4 is not one of [1, 2, 3]
-        [2, 3, 4] is too long
-
-    .. method:: validate(instance)
-
-        Check if the instance is valid under the current `schema`.
-
-        :raises: `jsonschema.exceptions.ValidationError` if the
-            instance is invalid
-
-        >>> schema = {"maxItems" : 2}
-        >>> Draft3Validator(schema).validate([2, 3, 4])
-        Traceback (most recent call last):
-            ...
-        ValidationError: [2, 3, 4] is too long
-
+.. autoclass:: jsonschema.protocols.Validator
+    :members:
 
 All of the `versioned validators <versioned-validators>` that are included with
-`jsonschema` adhere to the interface, and implementers of validator classes
+`jsonschema` adhere to the protocol, and implementers of validator classes
 that extend or complement the ones included should adhere to it as well. For
 more information see `creating-validators`.
 
 Type Checking
 -------------
 
-To handle JSON Schema's :validator:`type` property, a `IValidator` uses
+To handle JSON Schema's :kw:`type` keyword, a `Validator` uses
 an associated `TypeChecker`. The type checker provides an immutable
 mapping between names of types and functions that can test if an instance is
 of that type. The defaults are suitable for most users - each of the
@@ -187,7 +65,7 @@ Validating With Additional Types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Occasionally it can be useful to provide additional or alternate types when
-validating the JSON Schema's :validator:`type` property.
+validating JSON Schema's :kw:`type` keyword.
 
 `jsonschema` tries to strike a balance between performance in the common
 case and generality. For instance, JSON Schema defines a ``number`` type, which
@@ -204,22 +82,29 @@ given how common validating these types are.
 If you *do* want the generality, or just want to add a few specific additional
 types as being acceptable for a validator object, then you should update an
 existing `TypeChecker` or create a new one. You may then create a new
-`IValidator` via `jsonschema.validators.extend`.
+`Validator` via `jsonschema.validators.extend`.
 
-.. code-block:: python
+.. testcode::
+
+    from jsonschema import validators
 
     class MyInteger(object):
         pass
 
     def is_my_int(checker, instance):
         return (
-            Draft3Validator.TYPE_CHECKER.is_type(instance, "number") or
+            Draft202012Validator.TYPE_CHECKER.is_type(instance, "number") or
             isinstance(instance, MyInteger)
         )
 
-    type_checker = Draft3Validator.TYPE_CHECKER.redefine("number", is_my_int)
+    type_checker = Draft202012Validator.TYPE_CHECKER.redefine(
+        "number", is_my_int,
+    )
 
-    CustomValidator = extend(Draft3Validator, type_checker=type_checker)
+    CustomValidator = validators.extend(
+        Draft202012Validator,
+        type_checker=type_checker,
+    )
     validator = CustomValidator(schema={"type" : "number"})
 
 
@@ -232,8 +117,12 @@ Versioned Validators
 
 `jsonschema` ships with validator classes for various versions of
 the JSON Schema specification. For details on the methods and attributes
-that each validator class provides see the `IValidator` interface,
+that each validator class provides see the `Validator` protocol,
 which each included validator class implements.
+
+.. autoclass:: Draft202012Validator
+
+.. autoclass:: Draft201909Validator
 
 .. autoclass:: Draft7Validator
 
@@ -245,14 +134,14 @@ which each included validator class implements.
 
 
 For example, if you wanted to validate a schema you created against the
-Draft 6 meta-schema, you could use:
+Draft 2020-12 meta-schema, you could use:
 
-.. code-block:: python
+.. testcode::
 
-    from jsonschema import Draft6Validator
+    from jsonschema import Draft202012Validator
 
     schema = {
-        "$schema": "https://json-schema.org/schema#",
+        "$schema": Draft202012Validator.META_SCHEMA["$id"],
 
         "type": "object",
         "properties": {
@@ -261,29 +150,31 @@ Draft 6 meta-schema, you could use:
         },
         "required": ["email"]
     }
-    Draft6Validator.check_schema(schema)
+    Draft202012Validator.check_schema(schema)
 
+
+.. _validating formats:
 
 Validating Formats
 ------------------
 
-JSON Schema defines the :validator:`format` property which can be used to check
+JSON Schema defines the :kw:`format` keyword which can be used to check
 if primitive types (``string``\s, ``number``\s, ``boolean``\s) conform to
 well-defined formats. By default, no validation is enforced, but optionally,
 validation can be enabled by hooking in a format-checking object into an
-`IValidator`.
+`Validator`.
 
 .. doctest::
 
-    >>> validate("localhost", {"format" : "hostname"})
+    >>> validate("127.0.0.1", {"format" : "ipv4"})
     >>> validate(
     ...     instance="-12",
-    ...     schema={"format" : "hostname"},
-    ...     format_checker=draft7_format_checker,
+    ...     schema={"format" : "ipv4"},
+    ...     format_checker=draft202012_format_checker,
     ... )
     Traceback (most recent call last):
         ...
-    ValidationError: "-12" is not a "hostname"
+    ValidationError: "-12" is not a "ipv4"
 
 .. autoclass:: FormatChecker
     :members:
@@ -321,7 +212,7 @@ to validate. Their names can be viewed by inspecting the
 `FormatChecker.checkers` attribute. Certain checkers will only be
 available if an appropriate package is available for use. The easiest way to
 ensure you have what is needed is to install ``jsonschema`` using the
-``format`` or ``format_nongpl`` setuptools extra -- i.e.
+``format`` or ``format_nongpl`` collection of optional dependencies -- e.g.
 
 .. code-block:: sh
 
@@ -354,9 +245,10 @@ Checker                    Notes
 =========================  ====================
 ``color``                  requires webcolors_
 ``date``
-``date-time``              requires strict-rfc3339_ or rfc3339-validator_
+``date-time``              requires rfc3339-validator_
+``duration``               requires isoduration_
 ``email``
-``hostname``
+``hostname``               requires fqdn_
 ``idn-hostname``           requires idna_
 ``ipv4``
 ``ipv6``                   OS must have `socket.inet_pton` function
@@ -365,20 +257,23 @@ Checker                    Notes
 ``json-pointer``           requires jsonpointer_
 ``regex``
 ``relative-json-pointer``  requires jsonpointer_
-``time``                   requires strict-rfc3339_ or rfc3339-validator_
+``time``                   requires rfc3339-validator_
 ``uri``                    requires rfc3987_ or rfc3986-validator_
 ``uri-reference``          requires rfc3987_ or rfc3986-validator_
+``uri-template``           requires uri-template_
 =========================  ====================
 
 
+.. _fqdn: https://pypi.org/pypi/fqdn/
 .. _idna: https://pypi.org/pypi/idna/
+.. _isoduration: https://pypi.org/pypi/isoduration/
 .. _jsonpointer: https://pypi.org/pypi/jsonpointer/
-.. _rfc3987: https://pypi.org/pypi/rfc3987/
-.. _rfc5322: https://tools.ietf.org/html/rfc5322#section-3.4.1
-.. _strict-rfc3339: https://pypi.org/pypi/strict-rfc3339/
-.. _webcolors: https://pypi.org/pypi/webcolors/
 .. _rfc3339-validator: https://pypi.org/project/rfc3339-validator/
 .. _rfc3986-validator: https://pypi.org/project/rfc3986-validator/
+.. _rfc3987: https://pypi.org/pypi/rfc3987/
+.. _rfc5322: https://tools.ietf.org/html/rfc5322#section-3.4.1
+.. _uri-template: https://pypi.org/pypi/uri-template/
+.. _webcolors: https://pypi.org/pypi/webcolors/
 
 .. note::
 
@@ -387,7 +282,7 @@ Checker                    Notes
     and that that recipient is the correct one the email is intended
     for, and since many valid email addresses are in many places
     incorrectly rejected, and many invalid email addresses are in many
-    places incorrectly accepted, the ``email`` format validator only
+    places incorrectly accepted, the ``email`` format keyword only
     provides a sanity check, not full rfc5322_ validation.
 
     The same applies to the ``idn-email`` format.

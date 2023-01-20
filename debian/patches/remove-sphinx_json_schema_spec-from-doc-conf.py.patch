@@ -1,0 +1,12 @@
+Index: python-jsonschema/docs/conf.py
+===================================================================
+--- python-jsonschema.orig/docs/conf.py
++++ python-jsonschema/docs/conf.py
+@@ -25,7 +25,6 @@ extensions = [
+     "sphinx.ext.napoleon",
+     "sphinx.ext.viewcode",
+     "sphinx_autodoc_typehints",
+-    "sphinx_json_schema_spec",
+ ]
+ 
+ cache_path = "_cache"

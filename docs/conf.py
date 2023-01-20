@@ -1,14 +1,7 @@
-# -*- coding: utf-8 -*-
-#
-# This file is execfile()d with the current directory set to its containing dir.
-
-from textwrap import dedent
+from importlib import metadata
 import os
 import re
 import sys
-
-import jsonschema
-
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -16,22 +9,25 @@ import jsonschema
 ext_paths = [os.path.abspath(os.path.pardir), os.path.dirname(__file__)]
 sys.path = ext_paths + sys.path
 
-# -- General configuration -----------------------------------------------------
+# -- General configuration -------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 # needs_sphinx = "1.0"
 
-# Add any Sphinx extension module names here, as strings. They can be extensions
-# coming with Sphinx (named "sphinx.ext.*") or your custom ones.
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named "sphinx.ext.*") or your custom
+# ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
+    "sphinx_json_schema_spec",
     "sphinxcontrib.spelling",
-    "jsonschema_role",
 ]
 
 cache_path = "_cache"
@@ -49,9 +45,9 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"jsonschema"
-author = u"Julian Berman"
-copyright = u"2013, " + author
+project = "jsonschema"
+author = "Julian Berman"
+copyright = "2013, " + author
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -59,7 +55,7 @@ copyright = u"2013, " + author
 #
 # version: The short X.Y version
 # release: The full version, including alpha/beta/rc tags.
-release = jsonschema.__version__
+release = metadata.version("jsonschema")
 version = release.partition("-")[0]
 
 # There are two options for replacing |today|: either, you set today to some
@@ -72,7 +68,7 @@ version = release.partition("-")[0]
 # directories to ignore when looking for source files.
 exclude_patterns = ["_build", "_cache", "_static", "_templates"]
 
-# The reST default role (used for this markup: `text`) to use for all documents.
+# The reST default role (used for this markup: `text`) to use for all documents
 default_role = "any"
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -81,28 +77,25 @@ pygments_style = "sphinx"
 # A list of ignored prefixes for module index sorting.
 # modindex_common_prefix = []
 
-doctest_global_setup = dedent(
-    """
-    from __future__ import print_function
-    from jsonschema import *
+doctest_global_setup = """
+from jsonschema import *
 """
-)
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/2.7", None),
-    "python3": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/3", None),
 }
 
 
-# -- Options for HTML output ---------------------------------------------------
+# -- Options for HTML output -----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = "pyramid"
+html_theme = "furo"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+#
 # html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -174,12 +167,12 @@ html_theme = "pyramid"
 htmlhelp_basename = "jsonschemadoc"
 
 
-# -- Options for LaTeX output --------------------------------------------------
+# -- Options for LaTeX output ----------------------------------------------
 
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, documentclass [howto/manual]).
+# Grouping the document tree into LaTeX files. List of tuples (source
+# start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ("index", "jsonschema.tex", u"jsonschema Documentation", author, "manual"),
+    ("index", "jsonschema.tex", "jsonschema Documentation", author, "manual"),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -203,17 +196,17 @@ latex_documents = [
 # latex_domain_indices = True
 
 
-# -- Options for manual page output --------------------------------------------
+# -- Options for manual page output ----------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [("index", "jsonschema", u"jsonschema Documentation", [author], 1)]
+man_pages = [("index", "jsonschema", "jsonschema Documentation", [author], 1)]
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
 
 
-# -- Options for Texinfo output ------------------------------------------------
+# -- Options for Texinfo output --------------------------------------------
 
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
@@ -222,7 +215,7 @@ texinfo_documents = [
     (
         "index",
         "jsonschema",
-        u"jsonschema Documentation",
+        "jsonschema Documentation",
         author,
         "jsonschema",
         "One line description of project.",
@@ -246,7 +239,15 @@ def entire_domain(host):
     return r"http.?://" + re.escape(host) + r"($|/.*)"
 
 
-linkcheck_ignore = [entire_domain("codecov.io")]
+linkcheck_ignore = [
+    entire_domain("img.shields.io"),
+    "https://github.com/python-jsonschema/jsonschema/actions",
+    "https://github.com/python-jsonschema/jsonschema/workflows/CI/badge.svg",
+]
+
+# -- Options for sphinxcontrib-autosectionlabel ---------------------------
+
+autosectionlabel_prefix_document = True
 
 # -- Options for sphinxcontrib-spelling -----------------------------------
 

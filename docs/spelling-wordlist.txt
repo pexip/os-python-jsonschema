@@ -1,5 +1,5 @@
 # this appears to be misinterpreting Napoleon types as prose, sigh...
-IValidator
+Validator
 TypeChecker
 UnknownType
 ValidationError
@@ -9,6 +9,7 @@ th
 callables
 deque
 dereferences
+filesystem
 hostname
 implementers
 indices
@@ -20,10 +21,12 @@ jsonschema
 majorly
 metaschema
 online
+outputter
 pre
 programmatically
 recurses
 regex
+repr
 sensical
 subschema
 subschemas
@@ -38,5 +41,5 @@ Zac
 HD
 
 Berman
-Freenode
+Libera
 GPL

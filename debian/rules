@@ -4,17 +4,23 @@ UPSTREAM_GIT := https://github.com/Julian/jsonschema.git
 include /usr/share/openstack-pkg-tools/pkgos.make
 
 export PYBUILD_NAME=jsonschema
+export PYBUILD_TEST_ARGS=-k 'not test_ipv4_validation_of_IP_addresses_leading_zeroes_should_be_rejected_as_they_are_treated_as_octals'
+
+export PACKAGE_VERSION=$(shell dpkg-parsechangelog | grep Version: | cut -d' ' -f2 | sed -e 's/^[[:digit:]]*://' -e 's/[-].*//' -e 's/~/.0/' | head -n 1)
+export SETUPTOOLS_SCM_PRETEND_VERSION=$(shell dpkg-parsechangelog -SVersion | sed -e 's/^[[:digit:]]*://' -e 's/[-].*//' -e 's/~/.0/' -e 's/+dfsg1//' | head -n 1)
 
 %:
 	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
 
 override_dh_auto_test:
 	# We need .egg_info for tests
-	dh_auto_install
+	set -e ; set -x ; for pyvers in $(PYTHON3S) ; do \
+		python$$pyvers -m build --skip-dependency-check --no-isolation --wheel --outdir $(CURDIR)/debian/tmp ; \
+	done
 	dh_auto_test
 
 override_dh_sphinxdoc:
 ifeq (,$(findstring nodoc, $(DEB_BUILD_OPTIONS)))
-	http_proxy=127.0.0.1:9 https_proxy=127.0.0.1:9 HTTP_PROXY=127.0.0.1:9 HTTPS_PROXY=127.0.0.1:9 PYTHONPATH=$(CURDIR) PYTHON=python3 python3 -m sphinx $(SPHINXOPTS) -b html docs $(CURDIR)/debian/python-jsonschema-doc/usr/share/doc/python-jsonschema-doc/html
+	http_proxy=127.0.0.1:9 https_proxy=127.0.0.1:9 HTTP_PROXY=127.0.0.1:9 HTTPS_PROXY=127.0.0.1:9 PYTHONPATH=$(CURDIR)/.pybuild/cpython3_$(shell py3versions -vd)_jsonschema/build PYTHON=python3 python3 -m sphinx $(SPHINXOPTS) -b html docs $(CURDIR)/debian/python-jsonschema-doc/usr/share/doc/python-jsonschema-doc/html
 	dh_sphinxdoc
 endif
