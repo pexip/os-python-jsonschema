@@ -3,15 +3,140 @@ Frequently Asked Questions
 ==========================
 
 
+My schema specifies format validation. Why do invalid instances seem valid?
+---------------------------------------------------------------------------
+
+The :kw:`format` keyword can be a bit of a stumbling block for new
+users working with JSON Schema.
+
+In a schema such as:
+
+.. code-block:: json
+
+    {"type": "string", "format": "date"}
+
+JSON Schema specifications have historically differentiated between the
+:kw:`format` keyword and other keywords. In particular, the
+:kw:`format` keyword was specified to be *informational* as much
+as it may be used for validation.
+
+In other words, for many use cases, schema authors may wish to use
+values for the :kw:`format` keyword but have no expectation
+they be validated alongside other required assertions in a schema.
+
+Of course this does not represent all or even most use cases -- many
+schema authors *do* wish to assert that instances conform fully, even to
+the specific format mentioned.
+
+In drafts prior to ``draft2019-09``, the decision on whether to
+automatically enable :kw:`format` validation was left up to
+validation implementations such as this one.
+
+This library made the choice to leave it off by default, for two reasons:
+
+    * for forward compatibility and implementation complexity reasons
+      -- if :kw:`format` validation were on by default, and a
+      future draft of JSON Schema introduced a hard-to-implement format,
+      either the implementation of that format would block releases of
+      this library until it were implemented, or the behavior surrounding
+      :kw:`format` would need to be even more complex than simply
+      defaulting to be on. It therefore was safer to start with it off,
+      and defend against the expectation that a given format would always
+      automatically work.
+
+    * given that a common use of JSON Schema is for portability across
+      languages (and therefore implementations of JSON Schema), so that
+      users be aware of this point itself regarding :kw:`format`
+      validation, and therefore remember to check any *other*
+      implementations they were using to ensure they too were explicitly
+      enabled for :kw:`format` validation.
+
+As of ``draft2019-09`` however, the opt-out by default behavior
+mentioned here is now *required* for all validators.
+
+Difficult as this may sound for new users, at this point it at least
+means they should expect the same behavior that has always been
+implemented here, across any other implementation they encounter.
+
+.. seealso::
+
+    `Draft 2019-09's release notes on format <https://json-schema.org/draft/2019-09/release-notes.html#format-vocabulary>`_
+
+        for upstream details on the behavior of format and how it has changed
+        in ``draft2019-09``
+
+    `validating formats`
+
+        for details on how to enable format validation
+
+    `jsonschema.FormatChecker`
+
+        the object which implements format validation
+
+
+How do I configure a base URI for ``$ref`` resolution using local files?
+------------------------------------------------------------------------
+
+`jsonschema` supports loading schemas from the filesystem.
+
+The most common mistake when configuring a :class:`~jsonschema.RefResolver`
+to retrieve schemas from the local filesystem is to give it a base URI
+which points to a directory, but forget to add a trailing slash.
+
+For example, given a directory ``/tmp/foo/`` with ``bar/schema.json``
+within it, you should use something like:
+
+.. code-block:: python
+
+    from pathlib import Path
+
+    import jsonschema.validators
+
+    path = Path("/tmp/foo")
+    resolver = jsonschema.validators.RefResolver(
+        base_uri=f"{path.as_uri()}/",
+        referrer=True,
+    )
+    jsonschema.validate(
+        instance={},
+        schema={"$ref": "bar/schema.json"},
+        resolver=resolver,
+    )
+
+where note:
+
+    * the base URI has a trailing slash, even though
+      `pathlib.PurePath.as_uri` does not add it!
+    * any relative refs are now given relative to the provided directory
+
+If you forget the trailing slash, you'll find references are resolved a
+directory too high.
+
+You're likely familiar with this behavior from your browser. If you
+visit a page at ``https://example.com/foo``, then links on it like
+``<a href="./bar">`` take you to ``https://example.com/bar``, not
+``https://example.com/foo/bar``. For this reason many sites will
+redirect ``https://example.com/foo`` to ``https://example.com/foo/``,
+i.e. add the trailing slash, so that relative links on the page will keep the
+last path component.
+
+There are, in summary, 2 ways to do this properly:
+
+* Remember to include a trailing slash, so your base URI is
+  ``file:///foo/bar/`` rather than ``file:///foo/bar``, as shown above
+* Use a file within the directory as your base URI rather than the
+  directory itself, i.e. ``file://foo/bar/baz.json``, which will of course
+  cause ``baz.json`` to be removed while resolving relative URIs
+
 Why doesn't my schema's default property set the default on my instance?
 ------------------------------------------------------------------------
 
 The basic answer is that the specification does not require that
-:validator:`default` actually do anything.
+:kw:`default` actually do anything.
 
 For an inkling as to *why* it doesn't actually do anything, consider
-that none of the other validators modify the instance either. More
-importantly, having :validator:`default` modify the instance can produce
+that none of the other keywords modify the instance either. More
+importantly, having :kw:`default` modify the instance can produce
 quite peculiar things. It's perfectly valid (and perhaps even useful)
 to have a default that is not valid under the schema it lives in! So an
 instance modified by the default would pass validation the first time,
@@ -19,15 +144,15 @@ but fail the second!
 
 Still, filling in defaults is a thing that is useful. `jsonschema`
 allows you to `define your own validator classes and callables
-<creating>`, so you can easily create an `jsonschema.IValidator` that
-does do default setting. Here's some code to get you started. (In
+<creating>`, so you can easily create an `jsonschema.protocols.Validator`
+that does do default setting. Here's some code to get you started. (In
 this code, we add the default properties to each object *before* the
 properties are validated, so the default values themselves will need to
 be valid under the schema.)
 
-    .. code-block:: python
+    .. testcode::
 
-        from jsonschema import Draft7Validator, validators
+        from jsonschema import Draft202012Validator, validators
 
 
         def extend_with_default(validator_class):
@@ -48,21 +173,21 @@ be valid under the schema.)
             )
 
 
-        DefaultValidatingDraft7Validator = extend_with_default(Draft7Validator)
+        DefaultValidatingValidator = extend_with_default(Draft202012Validator)
 
 
         # Example usage:
         obj = {}
         schema = {'properties': {'foo': {'default': 'bar'}}}
-        # Note jsonschem.validate(obj, schema, cls=DefaultValidatingDraft7Validator)
-        # will not work because the metaschema contains `default` directives.
-        DefaultValidatingDraft7Validator(schema).validate(obj)
+        # Note jsonschema.validate(obj, schema, cls=DefaultValidatingValidator)
+        # will not work because the metaschema contains `default` keywords.
+        DefaultValidatingValidator(schema).validate(obj)
         assert obj == {'foo': 'bar'}
 
 
-See the above-linked document for more info on how this works, but
-basically, it just extends the :validator:`properties` validator on
-a `jsonschema.Draft7Validator` to then go ahead and update all the
+See the above-linked document for more info on how this works,
+but basically, it just extends the :kw:`properties` keyword on a
+`jsonschema.Draft202012Validator` to then go ahead and update all the
 defaults.
 
 .. note::
@@ -80,7 +205,7 @@ defaults.
     all of its properties, but only if your schema provides a default
     value for the object itself, like so:
 
-    .. code-block:: python
+    .. testcode::
 
         schema = {
             "type": "object",
@@ -99,18 +224,18 @@ defaults.
         }
 
         obj = {}
-        DefaultValidatingDraft7Validator(schema).validate(obj)
+        DefaultValidatingValidator(schema).validate(obj)
         assert obj == {'outer-object': {'inner-object': 'INNER-DEFAULT'}}
 
     ...but if you don't provide a default value for your object, then
     it won't be instantiated at all, much less populated with default
     properties.
 
-    .. code-block:: python
+    .. testcode::
 
         del schema["properties"]["outer-object"]["default"]
         obj2 = {}
-        DefaultValidatingDraft7Validator(schema).validate(obj2)
+        DefaultValidatingValidator(schema).validate(obj2)
         assert obj2 == {} # whoops
 
 
@@ -138,11 +263,12 @@ number:
 The following are *not* considered public API and may change without
 notice:
 
-    * the exact wording and contents of error messages; typical
-      reasons to do this seem to involve unit tests. API users are
-      encouraged to use the extensive introspection provided in
-      `jsonschema.exceptions.ValidationError`\s instead to make meaningful
-      assertions about what failed.
+    * the exact wording and contents of error messages; typical reasons
+      to rely on this seem to involve downstream tests in packages using
+      `jsonschema`. These use cases are encouraged to use the extensive
+      introspection provided in `jsonschema.exceptions.ValidationError`\s
+      instead to make meaningful assertions about what failed rather than
+      relying on *how* what failed is explained to a human.
 
     * the order in which validation errors are returned or raised
 
@@ -150,8 +276,12 @@ notice:
 
     * the contents of the ``jsonschema.benchmarks`` package
 
-    * the ``jsonschema.compat`` module, which is for internal
-      compatibility use
+    * the specific non-zero error codes presented by the command line
+      interface
+
+    * the exact representation of errors presented by the command line
+      interface, other than that errors represented by the plain outputter
+      will be reported one per line
 
     * anything marked private
 

@@ -1,0 +1,13 @@
+Index: python-jsonschema/jsonschema/tests/_helpers.py
+===================================================================
+--- python-jsonschema.orig/jsonschema/tests/_helpers.py
++++ python-jsonschema/jsonschema/tests/_helpers.py
+@@ -18,7 +18,7 @@ def bug(issue=None):
+     return message
+ 
+ 
+-def test_suite_bug(issue):
++def test_suite_bug(issue=None):
+     return (
+         "A known test suite bug. "
+         f"See {urljoin(TEST_SUITE_ISSUES_URL, str(issue))}."

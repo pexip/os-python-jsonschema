@@ -1,3 +1,204 @@
+v4.10.3
+-------
+
+* ``jsonschema.validators.validator_for`` now properly uses the explicitly
+  provided default validator even if the ``$schema`` URI is not found.
+
+v4.10.2
+-------
+
+* Fix a second place where subclasses may have added attrs attributes (#982).
+
+v4.10.1
+-------
+
+* Fix Validator.evolve (and APIs like ``iter_errors`` which call it) for cases
+  where the validator class has been subclassed. Doing so wasn't intended to be
+  public API, but given it didn't warn or raise an error it's of course
+  understandable. The next release however will make it warn (and a future one
+  will make it error). If you need help migrating usage of inheriting from a
+  validator class feel free to open a discussion and I'll try to give some
+  guidance (#982).
+
+v4.10.0
+-------
+
+* Add support for referencing schemas with ``$ref`` across different versions
+  of the specification than the referrer's
+
+v4.9.1
+------
+
+* Update some documentation examples to use newer validator releases in their
+  sample code.
+
+v4.9.0
+------
+
+* Fix relative ``$ref`` resolution when the base URI is a URN or other scheme
+  (#544).
+* ``pkgutil.resolve_name`` is now used to retrieve validators
+  provided on the command line. This function is only available on
+  3.9+, so 3.7 and 3.8 (which are still supported) now rely on the
+  `pkgutil_resolve_name <https://pypi.org/project/pkgutil_resolve_name/>`_
+  backport package. Note however that the CLI itself is due
+  to be deprecated shortly in favor of `check-jsonschema
+  <https://github.com/python-jsonschema/check-jsonschema>`_.
+
+v4.8.0
+------
+
+* ``best_match`` no longer traverses into ``anyOf`` and ``oneOf`` when all of
+  the errors within them seem equally applicable. This should lead to clearer
+  error messages in some cases where no branches were matched.
+
+v4.7.2
+------
+
+* Also have ``best_match`` handle cases where the ``type`` validator is an
+  array.
+
+v4.7.1
+------
+
+* Minor tweak of the PyPI hyperlink names
+
+v4.7.0
+------
+
+* Enhance ``best_match`` to prefer errors from branches of the schema which
+  match the instance's type (#728)
+
+v4.6.2
+------
+
+* Fix a number of minor typos in docstrings, mostly private ones (#969)
+
+v4.6.1
+------
+
+* Gut the (incomplete) implementation of ``recursiveRef`` on draft 2019. It
+  needs completing, but for now can lead to recursion errors (e.g. #847).
+
+v4.6.0
+------
+
+* Fix ``unevaluatedProperties`` and ``unevaluatedItems`` for types they should
+  ignore (#949)
+* ``jsonschema`` now uses `hatch <https://hatch.pypa.io/>`_ for its build
+  process. This should be completely transparent to end-users (and only matters
+  to contributors).
+
+v4.5.1
+------
+
+* Revert changes to ``$dynamicRef`` which caused a performance regression
+  in v4.5.0
+
+v4.5.0
+------
+
+* Validator classes for each version now maintain references to the correct
+  corresponding format checker (#905)
+* Development has moved to a `GitHub organization
+  <https://github.com/python-jsonschema/>`_.
+  No functional behavior changes are expected from the change.
+
+v4.4.0
+------
+
+* Add ``mypy`` support (#892)
+* Add support for Python 3.11
+
+v4.3.3
+------
+
+* Properly report deprecation warnings at the right stack level (#899)
+
+v4.3.2
+------
+
+* Additional performance improvements for resolving refs (#896)
+
+v4.3.1
+------
+
+* Resolving refs has had performance improvements (#893)
+
+v4.3.0
+------
+
+* Fix undesired fallback to brute force container uniqueness check on
+  certain input types (#893)
+* Implement a PEP544 Protocol for validator classes (#890)
+
+v4.2.1
+------
+
+* Pin ``importlib.resources`` from below (#877)
+
+v4.2.0
+------
+
+* Use ``importlib.resources`` to load schemas (#873)
+* Ensure all elements of arrays are verified for uniqueness by ``uniqueItems``
+  (#866)
+
+v4.1.2
+------
+
+* Fix ``dependentSchemas`` to properly consider non-object instances to be
+  valid (#850)
+
+v4.1.1
+------
+
+* Fix ``prefixItems`` not indicating which item was invalid within the instance
+  path (#862)
+
+v4.1.0
+------
+
+* Add Python 3.10 to the list of supported Python versions
+
+v4.0.1
+------
+
+* Fix the declaration of minimum supported Python version (#846)
+
+v4.0.0
+------
+
+* Partial support for Draft 2020-12 (as well as 2019-09).
+  Thanks to Thomas Schmidt and Harald Nezbeda.
+* ``False`` and ``0`` are now properly considered non-equal even
+  recursively within a container (#686). As part of this change,
+  ``uniqueItems`` validation may be *slower* in some cases. Please feel
+  free to report any significant performance regressions, though in
+  some cases they may be difficult to address given the specification
+  requirement.
+* The CLI has been improved, and in particular now supports a ``--output``
+  option (with ``plain`` (default) or ``pretty`` arguments) to control the
+  output format. Future work may add additional machine-parsable output
+  formats.
+* Code surrounding ``DEFAULT_TYPES`` and the legacy mechanism for
+  specifying types to validators have been removed, as per the deprecation
+  policy. Validators should use the ``TypeChecker`` object to customize
+  the set of Python types corresponding to JSON Schema types.
+* Validation errors now have a ``json_path`` attribute, describing their
+  location in JSON path format
+* Support for the IP address and domain name formats has been improved
+* Support for Python 2 and 3.6 has been dropped, with ``python_requires``
+  properly set.
+* ``multipleOf`` could overflow when given sufficiently large numbers. Now,
+  when an overflow occurs, ``jsonschema`` will fall back to using fraction
+  division (#746).
+* ``jsonschema.__version__``, ``jsonschema.validators.validators``,
+  ``jsonschema.validators.meta_schemas`` and
+  ``jsonschema.RefResolver.in_scope`` have been deprecated, as has
+  passing a second-argument schema to ``Validator.iter_errors`` and
+  ``Validator.is_valid``.
+
 v3.2.0
 ------
 
@@ -43,7 +244,7 @@ v2.6.0
 * Support for Python 2.6 has been dropped.
 * Improve a few error messages for ``uniqueItems`` (#224) and
   ``additionalProperties`` (#317)
-* Fixed an issue with ``ErrorTree``'s handling of multiple errors (#288) 
+* Fixed an issue with ``ErrorTree``'s handling of multiple errors (#288)
 
 v2.5.0
 ------
@@ -175,7 +376,7 @@ v0.4
     In order to make this happen (and also to clean things up a bit), a number
     of deprecations are necessary:
 
-        * ``stop_on_error`` is deprecated in ``Validator.__init__``. Use 
+        * ``stop_on_error`` is deprecated in ``Validator.__init__``. Use
           ``Validator.iter_errors()`` instead.
         * ``number_types`` and ``string_types`` are deprecated there as well.
           Use ``types={"number" : ..., "string" : ...}`` instead.

@@ -1,0 +1,20 @@
+Description: Do not use furo theme
+ This Sphinx theme isn't available in Debian, and I don't think it's
+ important, so just disabling it for now.
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: not-needed
+Last-Update: 2022-06-13
+
+Index: python-jsonschema/docs/conf.py
+===================================================================
+--- python-jsonschema.orig/docs/conf.py
++++ python-jsonschema/docs/conf.py
+@@ -88,7 +88,7 @@ intersphinx_mapping = {
+ 
+ # The theme to use for HTML and HTML Help pages.  See the documentation for
+ # a list of builtin themes.
+-html_theme = "furo"
++#html_theme = "furo"
+ 
+ # Theme options are theme-specific and customize the look and feel of a theme
+ # further.  For a list of options available for each theme, see the

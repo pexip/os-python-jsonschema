@@ -2,7 +2,7 @@
 jsonschema
 ==========
 
-|PyPI| |Pythons| |Travis| |AppVeyor| |Codecov| |ReadTheDocs|
+|PyPI| |Pythons| |CI| |ReadTheDocs| |Precommit| |Zenodo|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/jsonschema.svg
    :alt: PyPI version
@@ -12,25 +12,24 @@ jsonschema
    :alt: Supported Python versions
    :target: https://pypi.org/project/jsonschema/
 
-.. |Travis| image:: https://travis-ci.com/Julian/jsonschema.svg?branch=master
-   :alt: Travis build status
-   :target: https://travis-ci.com/Julian/jsonschema
-
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/adtt0aiaihy6muyn/branch/master?svg=true
-   :alt: AppVeyor build status
-   :target: https://ci.appveyor.com/project/Julian/jsonschema
-
-.. |Codecov| image:: https://codecov.io/gh/Julian/jsonschema/branch/master/graph/badge.svg
-   :alt: Codecov Code coverage
-   :target: https://codecov.io/gh/Julian/jsonschema
+.. |CI| image:: https://github.com/python-jsonschema/jsonschema/workflows/CI/badge.svg
+  :alt: Build status
+  :target: https://github.com/python-jsonschema/jsonschema/actions?query=workflow%3ACI
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/python-jsonschema/badge/?version=stable&style=flat
    :alt: ReadTheDocs status
    :target: https://python-jsonschema.readthedocs.io/en/stable/
 
+.. |Precommit| image:: https://results.pre-commit.ci/badge/github/python-jsonschema/jsonschema/main.svg
+   :alt: pre-commit.ci status
+   :target: https://results.pre-commit.ci/latest/github/python-jsonschema/jsonschema/main
 
-``jsonschema`` is an implementation of `JSON Schema <https://json-schema.org>`_
-for Python (supporting 2.7+ including Python 3).
+.. |Zenodo| image:: https://zenodo.org/badge/3072629.svg
+   :target: https://zenodo.org/badge/latestdoi/3072629
+
+
+``jsonschema`` is an implementation of the `JSON Schema
+<https://json-schema.org>`_ specification for Python.
 
 .. code-block:: python
 
@@ -59,19 +58,23 @@ It can also be used from console:
 
 .. code-block:: bash
 
-    $ jsonschema -i sample.json sample.schema
+    $ jsonschema --instance sample.json sample.schema
 
 Features
 --------
 
-* Full support for
+* Partial support for
+  `Draft 2020-12 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft202012Validator>`_ and
+  `Draft 2019-09 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft201909Validator>`_,
+  except for ``dynamicRef`` / ``recursiveRef`` and ``$vocabulary`` (in-progress).
+  Full support for
   `Draft 7 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft7Validator>`_,
   `Draft 6 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft6Validator>`_,
   `Draft 4 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft4Validator>`_
   and
   `Draft 3 <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.Draft3Validator>`_
 
-* `Lazy validation <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.IValidator.iter_errors>`_
+* `Lazy validation <https://python-jsonschema.readthedocs.io/en/latest/validate/#jsonschema.protocols.Validator.iter_errors>`_
   that can iteratively report *all* validation errors.
 
 * `Programmatic querying <https://python-jsonschema.readthedocs.io/en/latest/errors/>`_
@@ -86,33 +89,6 @@ Installation
 .. code-block:: bash
 
     $ pip install jsonschema
-
-
-Demo
-----
-
-Try ``jsonschema`` interactively in this online demo:
-
-.. image:: https://user-images.githubusercontent.com/1155573/56745335-8b158a00-6750-11e9-8776-83fa675939c4.png
-    :target: https://notebooks.ai/demo/gh/Julian/jsonschema
-    :alt: Open Live Demo
-
-
-Online demo Notebook will look similar to this:
-
-
-.. image:: https://user-images.githubusercontent.com/1155573/56820861-5c1c1880-6823-11e9-802a-ce01c5ec574f.gif
-    :alt: Open Live Demo
-    :width: 480 px
-
-
-Release Notes
--------------
-
-v3.1 brings support for ECMA 262 dialect regular expressions
-throughout schemas, as recommended by the specification. Big
-thanks to @Zac-HD for authoring support in a new `js-regex
-<https://pypi.org/project/js-regex/>`_ library.
 
 
 Running the Test Suite
@@ -133,45 +109,38 @@ Benchmarks
 ----------
 
 ``jsonschema``'s benchmarks make use of `pyperf
-<https://pyperf.readthedocs.io>`_.
+<https://pyperf.readthedocs.io>`_. Running them can be done via::
 
-Running them can be done via ``tox -e perf``, or by invoking the ``pyperf``
-commands externally (after ensuring that both it and ``jsonschema`` itself are
-installed)::
-
-    $ python -m pyperf jsonschema/benchmarks/test_suite.py --hist --output results.json
-
-To compare to a previous run, use::
-
-    $ python -m pyperf compare_to --table reference.json results.json
-
-See the ``pyperf`` documentation for more details.
+      $ tox -e perf
 
 
 Community
 ---------
 
-There's a `mailing list <https://groups.google.com/forum/#!forum/jsonschema>`_
-for this implementation on Google Groups.
+The JSON Schema specification has `a Slack
+<https://json-schema.slack.com>`_, with an `invite link on its home page
+<https://json-schema.org/>`_. Many folks knowledgeable on authoring
+schemas can be found there.
 
-Please join, and feel free to send questions there.
+Otherwise, asking questions on Stack Overflow is another means of
+getting help if you're stuck.
 
 
-Contributing
-------------
+About
+-----
 
 I'm Julian Berman.
 
-``jsonschema`` is on `GitHub <https://github.com/Julian/jsonschema>`_.
+``jsonschema`` is on `GitHub <https://github.com/python-jsonschema/jsonschema>`_.
 
 Get in touch, via GitHub or otherwise, if you've got something to contribute,
 it'd be most welcome!
 
-You can also generally find me on Freenode (nick: ``tos9``) in various
+You can also generally find me on Libera (nick: ``Julian``) in various
 channels, including ``#python``.
 
-If you feel overwhelmingly grateful, you can also woo me with beer money
-via Google Pay with the email in my GitHub profile.
+If you feel overwhelmingly grateful, you can also `sponsor me
+<https://github.com/sponsors/Julian/>`_.
 
 And for companies who appreciate ``jsonschema`` and its continued support
 and growth, ``jsonschema`` is also now supportable via `TideLift

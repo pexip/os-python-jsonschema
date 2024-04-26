@@ -1,2 +1,5 @@
 remove-sphinxcontrib.spelling-from-doc-conf.py.patch
 fix-lintian-privacy-breach.patch
+do-not-use-furo-theme.patch
+fix-broken-test_suite_bug.patch
+remove-sphinx_json_schema_spec-from-doc-conf.py.patch
