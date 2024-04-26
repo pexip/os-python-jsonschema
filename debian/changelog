@@ -1,3 +1,9 @@
+python-jsonschema (4.10.3-1+pexip24u1) pexip; urgency=medium
+
+  * New upstream release
+
+ -- Mark Hymers <mark.hymers@pexip.com>  Fri, 26 Apr 2024 14:09:20 +0000
+
 python-jsonschema (4.10.3-1) unstable; urgency=medium
 
   * Uploading to unstable.
