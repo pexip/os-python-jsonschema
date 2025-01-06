@@ -1,10 +1,5 @@
 Tests: upstream-py3
 Depends:
- python3-lxml,
- python3-mock,
- python3-nose,
- python3-pip,
- python3-pyrsistent,
- python3-pytest,
- python3-twisted,
  @,
+ @builddeps@,
+Restrictions: allow-stderr

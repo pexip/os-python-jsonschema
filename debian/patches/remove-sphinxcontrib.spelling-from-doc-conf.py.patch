@@ -8,16 +8,16 @@ Index: python-jsonschema/docs/conf.py
 ===================================================================
 --- python-jsonschema.orig/docs/conf.py
 +++ python-jsonschema/docs/conf.py
-@@ -22,12 +22,10 @@ extensions = [
-     "sphinx.ext.autosectionlabel",
-     "sphinx.ext.coverage",
+@@ -22,12 +22,10 @@
      "sphinx.ext.doctest",
+     "sphinx.ext.extlinks",
+     "sphinx.ext.imgconverter",
 -    "sphinx.ext.intersphinx",
      "sphinx.ext.napoleon",
      "sphinx.ext.viewcode",
-     "sphinx_autodoc_typehints",
+     "sphinx_copybutton",
      "sphinx_json_schema_spec",
 -    "sphinxcontrib.spelling",
+     "sphinxext.opengraph",
  ]
  
- cache_path = "_cache"

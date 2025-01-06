@@ -1,3 +1,56 @@
+python-jsonschema (4.19.2-6) unstable; urgency=medium
+
+  * Now also recommends: python3-fqdn, python3-isoduration,
+    python3-rfc3339-validator, python3-rfc3986-validator (Closes: #1077934).
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 06 Jan 2025 12:47:31 +0100
+
+python-jsonschema (4.19.2-5) unstable; urgency=medium
+
+  * Removed build-depends on python3-pkg-resource (Closes: #1083653).
+
+ -- Thomas Goirand <zigo@debian.org>  Sun, 13 Oct 2024 22:35:51 +0200
+
+python-jsonschema (4.19.2-4) unstable; urgency=medium
+
+  * Removed python3-six from build-depends (Closes: #1079973).
+  * Removed python3-nose and python3-mock from build-depends
+    (Closes: #1081565).
+
+ -- Thomas Goirand <zigo@debian.org>  Tue, 24 Sep 2024 12:57:03 +0200
+
+python-jsonschema (4.19.2-3) unstable; urgency=medium
+
+  * Fix short and long description (Closes: #1053505).
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 17 May 2024 13:53:51 +0200
+
+python-jsonschema (4.19.2-2) unstable; urgency=medium
+
+  * Removed extraneous obsolete python3-mock dependency (Closes: #1064129).
+  * Uploading to unstable.
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 19 Feb 2024 14:21:42 +0100
+
+python-jsonschema (4.19.2-1) experimental; urgency=medium
+
+  * New upstream release (Closes: #1055516).
+  * Rebase patches.
+  * Add python3-hatch-fancy-pypi-readme as build-depends indep.
+  * Add python3-referencing and python3-rpds-py as (build-)depends.
+  * Add python3-jsonschema-specifications as (build-)depends.
+  * Add python3-sphinx-copybutton as build-depends.
+  * Add python3-sphinxext-opengraph as build-depends.
+  * Add sphinx-does-not-call-_resolve_broken_refs.patch.
+
+ -- Thomas Goirand <zigo@debian.org>  Wed, 15 Nov 2023 14:36:32 +0100
+
+python-jsonschema (4.10.3-2) unstable; urgency=medium
+
+  * Do not b-d on nose (Closes: #1018519).
+
+ -- Thomas Goirand <zigo@debian.org>  Mon, 14 Aug 2023 11:09:17 +0200
+
 python-jsonschema (4.10.3-1) unstable; urgency=medium
 
   * Uploading to unstable.
