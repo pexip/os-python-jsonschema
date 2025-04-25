@@ -6,9 +6,16 @@ ValidationError
 
 # 0th, sigh...
 th
+amongst
 callables
+# non-codeblocked cls from autoapi
+cls
 deque
+deduplication
 dereferences
+deserialize
+deserialized
+deserializing
 filesystem
 hostname
 implementers
@@ -17,6 +24,7 @@ indices
 ipv
 iterable
 iteratively
+Javascript
 jsonschema
 majorly
 metaschema
@@ -24,13 +32,19 @@ online
 outputter
 pre
 programmatically
+pseudocode
 recurses
 regex
 repr
+runtime
 sensical
+subclassing
+submodule
+submodules
 subschema
 subschemas
 subscopes
+untrusted
 uri
 validator
 validators

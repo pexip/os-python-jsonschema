@@ -39,6 +39,21 @@
                 "valid": true
             },
             {
+                "description": "invalid time string with extra leading zeros",
+                "data": "008:030:006Z",
+                "valid": false
+            },
+            {
+                "description": "invalid time string with no leading zero for single digit",
+                "data": "8:3:6Z",
+                "valid": false
+            },
+            {
+                "description": "hour, minute, second must be two digits",
+                "data": "8:0030:6Z",
+                "valid": false
+            },
+            {
                 "description": "a valid time string with leap second, Zulu",
                 "data": "23:59:60Z",
                 "valid": true
@@ -129,6 +144,11 @@
                 "valid": true
             },
             {
+                "description": "hour, minute in time-offset must be two digits",
+                "data": "08:30:06-8:000",
+                "valid": false
+            },
+            {
                 "description": "a valid time string with case-insensitive Z",
                 "data": "08:30:06z",
                 "valid": true
@@ -189,8 +209,23 @@
                 "valid": false
             },
             {
+                "description": "no time offset with second fraction",
+                "data": "12:00:00.52",
+                "valid": false
+            },
+            {
                 "description": "invalid non-ASCII '২' (a Bengali 2)",
                 "data": "1২:00:00Z",
+                "valid": false
+            },
+            {
+                "description": "offset not starting with plus or minus",
+                "data": "08:30:06#00:20",
+                "valid": false
+            },
+            {
+                "description": "contains letters",
+                "data": "ab:cd:ef",
                 "valid": false
             }
         ]

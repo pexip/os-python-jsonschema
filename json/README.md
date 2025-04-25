@@ -12,6 +12,8 @@ This repository contains a set of JSON objects that implementers of JSON Schema 
 It is meant to be language agnostic and should require only a JSON parser.
 The conversion of the JSON objects into tests within a specific language and test framework of choice is left to be done by the validator implementer.
 
+The recommended workflow of this test suite is to clone the `main` branch of this repository as a `git submodule` or `git subtree`. The `main` branch is always stable.
+
 ## Coverage
 
 All JSON Schema specification releases should be well covered by this suite, including drafts 2020-12, 2019-09, 07, 06, 04 and 03.
@@ -19,6 +21,8 @@ Drafts 04 and 03 are considered "frozen" in that less effort is put in to backpo
 
 Additional coverage is always welcome, particularly for bugs encountered in real-world implementations.
 If you see anything missing or incorrect, please feel free to [file an issue](https://github.com/json-schema-org/JSON-Schema-Test-Suite/issues) or [submit a PR](https://github.com/json-schema-org/JSON-Schema-Test-Suite).
+
+@gregsdennis has also started a separate [test suite](https://github.com/gregsdennis/json-schema-vocab-test-suites) that is modelled after this suite to cover third-party vocabularies.
 
 ## Introduction to the Test Suite Structure
 
@@ -103,6 +107,8 @@ The precise steps described do not need to be followed exactly, but the results 
 
 To test a specific version:
 
+* For 2019-09 and later published drafts, implementations that are able to detect the draft of each schema via `$schema` SHOULD be configured to do so
+* For draft-07 and earlier, draft-next, and implementations unable to detect via `$schema`, implementations MUST be configured to expect the draft matching the test directory name
 * Load any remote references [described below](additional-assumptions) and configure your implementation to retrieve them via their URIs
 * Walk the filesystem tree for that version's subdirectory and for each `.json` file found:
 
@@ -222,6 +228,7 @@ This suite is being used by:
 ### C++
 
 * [Modern C++ JSON schema validator](https://github.com/pboettch/json-schema-validator)
+* [Valijson](https://github.com/tristanpenman/valijson)
 
 ### Dart
 
@@ -280,8 +287,8 @@ Node-specific support is maintained in a [separate repository](https://github.co
 
 ### .NET
 
+* [JsonSchema.Net](https://github.com/gregsdennis/json-everything)
 * [Newtonsoft.Json.Schema](https://github.com/JamesNK/Newtonsoft.Json.Schema)
-* [Manatee.Json](https://github.com/gregsdennis/Manatee.Json)
 
 ### Perl
 
@@ -306,7 +313,7 @@ Node-specific support is maintained in a [separate repository](https://github.co
 * [fastjsonschema](https://github.com/seznam/python-fastjsonschema)
 * [hypothesis-jsonschema](https://github.com/Zac-HD/hypothesis-jsonschema)
 * [jschon](https://github.com/marksparkza/jschon)
-* [python-experimental, OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator/blob/master/docs/generators/python-experimental.md)
+* [OpenAPI JSON Schema Generator](https://github.com/openapi-json-schema-tools/openapi-json-schema-generator)
 
 ### Ruby
 
@@ -337,3 +344,5 @@ There are some sanity checks in place for testing the test suite. You can run
 them with `bin/jsonschema_suite check` or `tox`. They will be run automatically
 by [GitHub Actions](https://github.com/json-schema-org/JSON-Schema-Test-Suite/actions?query=workflow%3A%22Test+Suite+Sanity+Checking%22)
 as well.
+
+This repository is maintained by the JSON Schema organization, and will be governed by the JSON Schema steering committee (once it exists).
