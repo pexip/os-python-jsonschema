@@ -1,0 +1,18 @@
+Description: Do not call _resolve_broken_refs when building doc
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2023-11-27
+
+--- python-jsonschema-4.19.2.orig/docs/conf.py
++++ python-jsonschema-4.19.2/docs/conf.py
+@@ -66,8 +66,8 @@ def _resolve_broken_refs(app, env, node,
+         )
+ 
+ 
+-def setup(app):
+-    app.connect("missing-reference", _resolve_broken_refs)
++#def setup(app):
++#    app.connect("missing-reference", _resolve_broken_refs)
+ 
+ 
+ # = Builders =

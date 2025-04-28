@@ -8,6 +8,7 @@ When an invalid instance is encountered, a `ValidationError` will be
 raised or returned, depending on which method or function is used.
 
 .. autoexception:: ValidationError
+    :noindex:
 
     The information carried by an error roughly breaks down into:
 
@@ -123,6 +124,7 @@ In case an invalid schema itself is encountered, a `SchemaError` is
 raised.
 
 .. autoexception:: SchemaError
+    :noindex:
 
     The same attributes are present as for `ValidationError`\s.
 
@@ -229,15 +231,14 @@ failed when validating a given instance, you may want to do so using
 `jsonschema.exceptions.ErrorTree` objects.
 
 .. autoclass:: jsonschema.exceptions.ErrorTree
+    :noindex:
     :members:
     :special-members:
     :exclude-members: __dict__,__weakref__
 
     .. attribute:: errors
 
-        The mapping of validator keywords to the error objects (usually
-        `jsonschema.exceptions.ValidationError`\s) at this level
-        of the tree.
+        The mapping of validation keywords to the error objects (usually `jsonschema.exceptions.ValidationError`\s) at this level of the tree.
 
 Consider the following example:
 
@@ -270,12 +271,10 @@ error objects.
 
 .. testcode::
 
+    from jsonschema.exceptions import ErrorTree
     tree = ErrorTree(v.iter_errors(instance))
 
-As you can see, `jsonschema.exceptions.ErrorTree` takes an
-iterable of `ValidationError`\s when constructing a tree so
-you can directly pass it the return value of a validator object's
-`jsonschema.protocols.Validator.iter_errors` method.
+As you can see, `jsonschema.exceptions.ErrorTree` takes an iterable of `ValidationError`\s when constructing a tree so you can directly pass it the return value of a validator's `jsonschema.protocols.Validator.iter_errors` method.
 
 `ErrorTree`\s support a number of useful operations. The first one we
 might want to perform is to check whether a given element in our instance
@@ -361,9 +360,11 @@ to guess the most relevant error in a given bunch.
 
 
 .. autofunction:: best_match
+    :noindex:
 
 
 .. function:: relevance(validation_error)
+    :noindex:
 
     A key function that sorts errors based on heuristic relevance.
 
@@ -403,3 +404,4 @@ to guess the most relevant error in a given bunch.
 
 
 .. autofunction:: by_relevance
+    :noindex:

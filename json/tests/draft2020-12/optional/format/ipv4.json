@@ -1,7 +1,10 @@
 [
     {
         "description": "validation of IP addresses",
-        "schema": { "format": "ipv4" },
+        "schema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "format": "ipv4"
+        },
         "tests": [
             {
                 "description": "all string formats ignore integers",
@@ -77,6 +80,11 @@
             {
                 "description": "invalid non-ASCII '২' (a Bengali 2)",
                 "data": "1২7.0.0.1",
+                "valid": false
+            },
+            {
+                "description": "netmask is not a part of ipv4 address",
+                "data": "192.168.1.0/24",
                 "valid": false
             }
         ]

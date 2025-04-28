@@ -1,12 +1,17 @@
+Description: Remove sphinx_json_schema_spec from conf.py
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2023-11-15
+
 Index: python-jsonschema/docs/conf.py
 ===================================================================
 --- python-jsonschema.orig/docs/conf.py
 +++ python-jsonschema/docs/conf.py
-@@ -25,7 +25,6 @@ extensions = [
+@@ -25,7 +25,6 @@
      "sphinx.ext.napoleon",
      "sphinx.ext.viewcode",
-     "sphinx_autodoc_typehints",
+     "sphinx_copybutton",
 -    "sphinx_json_schema_spec",
+     "sphinxext.opengraph",
  ]
  
- cache_path = "_cache"

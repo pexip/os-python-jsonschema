@@ -19,20 +19,22 @@ Build-Depends:
  python3-sphinx,
 Build-Depends-Indep:
  python3-attr,
+ python3-hatch-fancy-pypi-readme,
  python3-hatch-vcs,
  python3-hatchling,
  python3-idna,
  python3-json-pointer,
+ python3-jsonschema-specifications,
  python3-lxml,
- python3-mock,
- python3-nose,
  python3-pip,
- python3-pkg-resources,
  python3-pyrsistent,
  python3-pytest,
+ python3-referencing,
  python3-rfc3987,
- python3-six,
+ python3-rpds-py,
  python3-sphinx-autodoc-typehints,
+ python3-sphinx-copybutton,
+ python3-sphinxext-opengraph,
  python3-twisted,
  python3-uritemplate,
  python3-webcolors,
@@ -65,19 +67,26 @@ Depends:
  ${misc:Depends},
  ${python3:Depends},
 Recommends:
+ python3-fqdn,
  python3-idna,
+ python3-isoduration,
  python3-json-pointer,
+ python3-jsonschema-specifications,
+ python3-referencing,
+ python3-rfc3339-validator,
+ python3-rfc3986-validator,
  python3-rfc3987,
+ python3-rpds-py,
  python3-uritemplate,
  python3-webcolors,
 Suggests:
  python-jsonschema-doc,
-Breaks:
- python3-json-pointer (<< 1.14),
-Description: An(other) implementation of JSON Schema (Draft 3, 4, 6, 7)
- JSON Schema is a specification for a JSON-based format for defining
- the structure of JSON data. JSON Schema provides a contract for what
- JSON data is required for a given application and how it can be
- modified, much like what XML Schema provides for XML. JSON Schema is
- intended to provide validation, documentation, and interaction control
- of JSON data.
+Description: An(other) implementation of JSON Schema
+ JSON Schema is a specification for a JSON-based format for defining the
+ structure of JSON data. JSON Schema provides a contract for what JSON data is
+ required for a given application and how it can be modified, much like what
+ XML Schema provides for XML. JSON Schema is intended to provide validation,
+ documentation, and interaction control of JSON data.
+ .
+ This package has full support for Draft 2020-12, Draft 2019-09, Draft 7,
+ Draft 6, Draft 4 and Draft 3.

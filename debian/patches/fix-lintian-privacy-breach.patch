@@ -1,13 +1,13 @@
 Description: Remove external sources from doc.
 Author: Michal Arbet <michal.arbet@ultimum.io>
 Forwarded: not-needed
-Last-Update: 2020-05-05
+Last-Update: 2023-11-15
 
 Index: python-jsonschema/README.rst
 ===================================================================
 --- python-jsonschema.orig/README.rst
 +++ python-jsonschema/README.rst
-@@ -2,32 +2,6 @@
+@@ -2,33 +2,6 @@
  jsonschema
  ==========
  
@@ -34,9 +34,10 @@ Index: python-jsonschema/README.rst
 -   :target: https://results.pre-commit.ci/latest/github/python-jsonschema/jsonschema/main
 -
 -.. |Zenodo| image:: https://zenodo.org/badge/3072629.svg
+-   :alt: Zenodo DOI
 -   :target: https://zenodo.org/badge/latestdoi/3072629
 -
 -
- ``jsonschema`` is an implementation of the `JSON Schema
- <https://json-schema.org>`_ specification for Python.
+ ``jsonschema`` is an implementation of the `JSON Schema <https://json-schema.org>`_ specification for Python.
  
+ .. code:: python
